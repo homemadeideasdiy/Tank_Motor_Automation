@@ -71,7 +71,7 @@ void tank_motor()
    Blynk.notify(String("Underground Tank is FULL. Percentage: ") + ug_percentage);
    ug_tank_alert = 1;    
  }
- else if ((oh_percentage <= oh_minimum) && (tank_alert != 2))
+ else if ((oh_percentage <= oh_minimum) && (ug_tank_alert != 2))
  {
   Blynk.notify(String("Underground Tank is EMPTY. Percentage: ") + ug_percentage);
   ug_tank_alert = 2;    
@@ -96,7 +96,7 @@ void tank_motor()
    Blynk.notify(String("Overhead Tank is FULL. Percentage: ") + oh_percentage);
    oh_tank_alert = 1;    
  }
- else if ((oh_percentage <= oh_minimum) && (tank_alert != 2))
+ else if ((oh_percentage <= oh_minimum) && (oh_tank_alert != 2))
  {
   Blynk.notify(String("Overhead Tank is EMPTY. Percentage: ") + oh_percentage);
   oh_tank_alert = 2;    
