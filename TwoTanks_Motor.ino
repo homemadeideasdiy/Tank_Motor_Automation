@@ -46,7 +46,7 @@ void setup()
  delayMicroseconds(500); // Wait a half a second
  pinMode(echoPin_OH,INPUT); //ECHO OH
  
- Blynk.config(auth, "blynk.ethniv.com", 443); //Connect to Blynk Cloud
+ Blynk.config(auth, "Blynk Server FQDN or IP Address", 443); //Connect to Blynk Cloud
  Blynk.connect();
 }
 
