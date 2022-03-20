@@ -28,8 +28,8 @@ MedianFilter filter_UG(31,0);
 MedianFilter filter_OH(31,0);
 
 int motor_auto = 1, motor = 0;
-int ug_percentage = 0, ug_minimum = 10;
-int oh_percentage = 0, oh_minimum = 50, oh_maximum = 100;
+int ug_percentage = 0, ug_minimum = 10, ug_maximum = 100, ug_tank_alert = 0;
+int oh_percentage = 0, oh_minimum = 50, oh_maximum = 100, oh_tank_alert = 0;
 
 void setup()
 {
@@ -62,7 +62,19 @@ void tank_motor()
  if(ug_distance<=130 && ug_distance>=25)
  {
   ug_percentage = (105 + 25 - ug_distance) / 1.05; // Calculating the percentage, 25 is empty space between sensor and water
-  Blynk.virtualWrite(V3, ug_percentage);
+  Blynk.virtualWrite(V4, ug_percentage);
+ }
+ 
+ //Underground Tank Notification
+ if ((ug_percentage >= ug_maximum) && (ug_tank_alert != 1))
+ {
+   Blynk.notify(String("Underground Tank is FULL. Percentage: ") + ug_percentage);
+   ug_tank_alert = 1;    
+ }
+ else if ((oh_percentage <= oh_minimum) && (tank_alert != 2))
+ {
+  Blynk.notify(String("Underground Tank is EMPTY. Percentage: ") + ug_percentage);
+  ug_tank_alert = 2;    
  }
  
  //Overhead Tank
@@ -75,7 +87,19 @@ void tank_motor()
  if(oh_distance<=72 && oh_distance>=25)
  {
   oh_percentage = (47 + 25 - oh_distance) / 0.47; // Calculating the percentage, 25 is empty space between sensor and water
-  Blynk.virtualWrite(V6, oh_percentage);
+  Blynk.virtualWrite(V7, oh_percentage);
+ }
+ 
+ //Overhead Tank Notification
+ if ((oh_percentage >= oh_maximum) && (oh_tank_alert != 1))
+ {
+   Blynk.notify(String("Overhead Tank is FULL. Percentage: ") + oh_percentage);
+   oh_tank_alert = 1;    
+ }
+ else if ((oh_percentage <= oh_minimum) && (tank_alert != 2))
+ {
+  Blynk.notify(String("Overhead Tank is EMPTY. Percentage: ") + oh_percentage);
+  oh_tank_alert = 2;    
  }
  
  //Motor
@@ -126,12 +150,17 @@ BLYNK_WRITE(2)
  ug_minimum=param.asInt();
 }
 
-BLYNK_WRITE(4)
+BLYNK_WRITE(3)
+{
+ ug_maximum=param.asInt();
+}
+
+BLYNK_WRITE(5)
 {
  oh_minimum=param.asInt();
 }
 
-BLYNK_WRITE(5)
+BLYNK_WRITE(6)
 {
  oh_maximum=param.asInt();
 }
